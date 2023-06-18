@@ -1,0 +1,33 @@
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class OpenWeatherMapTest {
+    private static WebDriver driver;
+
+    @BeforeAll
+    public static void setUp() {
+        System.setProperty("webdriver.chrome.driver", "caminho/para/o/chromedriver");
+        driver = new ChromeDriver();
+    }
+    @Test
+    public void validar() {
+        driver.get("https://openweathermap.org/");
+    }
+    @Test
+    public void pesquisar() {
+        driver.get("https://openweathermap.org/");
+    }
+
+    @Test
+    public void validarVento() {
+        driver.get("https://openweathermap.org/");
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        driver.quit();
+    }
+}

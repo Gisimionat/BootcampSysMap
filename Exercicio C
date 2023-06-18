@@ -1,0 +1,39 @@
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+
+public class TemperatureValidationTest {
+    private static final String apiKey = "YOUR_API_KEY";
+    private WebDriver driver;
+
+    @Test
+    public void testTemperatureValidation() {
+        System.setProperty("webdriver.chrome.driver", "caminho/para/o/chromedriver");
+        driver = new ChromeDriver();
+        driver.get("https://openweathermap.org/");
+        driver.findElement(By.xpath("//button[contains(text(), 'Metric:')]")).click();
+        
+        String cidade = driver.findElement(By.xpath("//span[@class='badge badge-info']")).getText();
+        String valorApi = getTemperatureFromAPI("São Paulo");
+        
+        Assert.assertEquals(cidade, valorApi);
+        
+        driver.quit();
+    }
+    private String getTemperatureFromAPI(String cidade) {
+        Response response = RestAssured.given()
+                .param("q", cidade)
+                .param("appid", apiKey)
+                .get("https://api.openweathermap.org/data/2.5/weather");
+        
+        float temperature = response.path("main.temp");
+        temperature = temperature - 273.15f; 
+
+        return String.format("%.1f", temperature);
+    }
+}
